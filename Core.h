@@ -9,7 +9,7 @@
 #define FRIJ                        Serial2
 #endif
 
-#define LOGLEVEL                    1
+#define LOGLEVEL                    0
 
 
 #define tmr_not_expired(x, y)       x < y ? 1 : 0
