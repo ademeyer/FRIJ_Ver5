@@ -108,13 +108,13 @@ void FRIJ_GPIO_Loop()
           }
           else if (i == 2) //increment
           {
-            if (set_box_temp < 126)
+            if (set_box_temp < 30)
               set_box_temp ++;
             clear_disp = true;
           }
           else if (i == 3) //decrement
           {
-            if (set_box_temp > -126)
+            if (set_box_temp > -30)
               set_box_temp --;
 
             clear_disp = true;

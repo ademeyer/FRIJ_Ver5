@@ -107,7 +107,7 @@ s16 ReadMessage(u32 eeprom_addr, u8* byteArr, u16 maxLen)
     inMe = read_eeprom(eLen++);
 #ifdef debug
     if (FRIJ)
-      FRIJ.printf(F("eLen: %d, inMe: %u\n"), eLen, inMe);
+      FRIJ.printf(F("%d: %u\n"), (eLen-1), inMe);
 #endif
     if (inMe == 0xFF)
       break;
@@ -165,7 +165,7 @@ s16 WriteMessage(u32 eeprom_addr, u8 *data, u16 len)
 s16 parameterMemoryReadAndWrite(u32 startAddr, u32 stopAddr, u8* value, u16 len, s8 _mode)
 {
   u32 val = 0;
-  byte Byte[4] = {0};
+ // byte Byte[4] = {0};
 
   u8 noOfByte = stopAddr - startAddr;
 

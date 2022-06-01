@@ -417,7 +417,7 @@ void setUp_GSM()
   digitalWrite(GSM_PWR, HIGH);
 #endif
   GSM.begin(BAUD_RATE);
-  GSM.setTimeout(100);
+  //GSM.setTimeout(100);
   init_GSM_str();
   gsm_operation_delay = millis() + GSM_DELAY;
   tcp_alive_timer = millis() + MAX_ALIVE_TIME + 120000;

@@ -22,7 +22,6 @@ void setup()
   delay(100);
   afio_cfg_debug_ports(AFIO_DEBUG_SW_ONLY);
 
-
 #ifdef debug
   FRIJ.begin(BAUD_RATE);
   FRIJ.setTimeout(50);

@@ -5,7 +5,7 @@ const u8                            eeprom_stat_no                =         6;//
 
 void form_standard_packet()
 {
-  if (op > -1 && BUFF_Len > 0)
+  if (op > -1 && BUFF_Len > 0 && BUFF_Len < (MAX_LEN / 2))
   {
     Res_Len = 0;
     u16 len = 0;
@@ -28,9 +28,8 @@ void form_standard_packet()
     {
       gsm_stage = _NET_STAT;
     }
-    /*
-      else if(op != HB_No)
-      {
+    else if (op != HB_No)
+    {
       if ((saveIndex + Res_Len) >= (EEPROMMAX - 1) || readIndex > saveIndex)
       {
         clearEventSector(true);
@@ -44,7 +43,7 @@ void form_standard_packet()
         {
           delay(1);
           saveIndex = saveIndex + Res_Len;
-      #ifdef debug
+#ifdef debug
           if (FRIJ)
           {
             FRIJ.print(F("saved, saveIndex: "));
@@ -52,11 +51,12 @@ void form_standard_packet()
             FRIJ.print(F(" readIndex: "));
             FRIJ.println(readIndex);
           }
-      #endif
+#endif
+          Res_Len = 0;
         }
       }
-      }
-    */
+    }
+
   }
 
   BUFF_Len = 0;
@@ -112,7 +112,7 @@ void periodic_dump_packet()
     else
     {
       BUFF_Len = 0;
-      return;
+      //return;
     }
     if ((len = NetworkInformation(value, sizeof(value), 0)) > 0)
     {
@@ -126,11 +126,14 @@ void periodic_dump_packet()
     else
     {
       BUFF_Len = 0;
-      return;
+      //return;
     }
 
-    op = PD_No;
-    if (valid_GPS) op = op + 1;
+    if (BUFF_Len > 0)
+    {
+      op = PD_No;
+      if (valid_GPS) op = op + 1;
+    }
     pdTimer = millis();
     beatTimer = millis();
   }
@@ -138,7 +141,11 @@ void periodic_dump_packet()
 
 void heart_beat_packet()
 {
-  if (BUFF_Len != 0 || op != -1) return;
+  if (BUFF_Len != 0 || op != -1)
+  {
+    beatTimer = millis();
+    return;
+  }
   if (tcp_alive && millis() >= (beatTimer + MAX_BEAT_TIME))
   {
     u8 value[128] = {0};
@@ -148,7 +155,7 @@ void heart_beat_packet()
       for (int i = 0; i < len; i++)
         BUFF[BUFF_Len++] = (char)value[i];
 #ifdef debug
-      FRIJ.printf(F("HB --> %s:%d\n"), BUFF, len);
+      FRIJ.printf(F("HB --> %s:%d:%d\n"), BUFF, len, BUFF_Len);
 #endif
       op = HB_No;
     }
@@ -232,11 +239,12 @@ void operate_on_data()
 #endif
         }
 
-        if (r == (u8)ParameterOperation(op, _value, r, 1))
+        if (r == ((u8)ParameterOperation(op, _value, r, 1)))
         {
           BUFF[BUFF_Len++] = 'A';
           BUFF[BUFF_Len++] = 'C';
           BUFF[BUFF_Len++] = 'K';
+          EEPROM_Read = false;
         }
         else
         {
@@ -244,7 +252,6 @@ void operate_on_data()
           BUFF[BUFF_Len++] = 'A';
           BUFF[BUFF_Len++] = 'K';
         }
-        EEPROM_Read = false;
       }
       else
       {
@@ -302,7 +309,7 @@ void EEPROM_Read_Statics()
       if ((len = ParameterOperation((eeprom_stat[i] - 1), value, sizeof(value), 0)) > 0)
       {
 #ifdef debug
-        FRIJ.printf(F("para #%d:%d\n"), eeprom_stat[i], value[0]);
+        FRIJ.printf(F("no #%d--> paraID #%d:%d\n"), i, eeprom_stat[i], value[0]);
 #endif
         if      (i == 0) mode = value[0];
         //else if (i == 1) pdTime = value[0];
