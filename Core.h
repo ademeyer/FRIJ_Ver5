@@ -71,8 +71,8 @@ char                                ICCID[32]                     =         "";
 char                                CSQ[8]                        =         "";
 char                                IP[32]                        =         "";
 char                                GRD[32]                       =         "GRD000000";
-char                                server[]                      =         "104.131.53.102"; //"143.110.236.10"
-char                                host[]                        =         "2000"; //"8001";
+char                                server[]                      =         "143.110.236.10"; //"104.131.53.102"
+char                                host[]                        =         "8001"; //"2000"
 char                                custom_apn[32]                =         "";
 char                                ttimeBuf[32]                  =         "";
 
