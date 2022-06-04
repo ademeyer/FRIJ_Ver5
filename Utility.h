@@ -90,7 +90,7 @@ s8 progNumber(char *buf)
   s8 f = -1;
   for (s8 i = 0; i < MAX_Para; i++)
   {
-    if(strstr(buf, op_command[i]) != NULL)
+    if (strstr(buf, op_command[i]) != NULL)
     {
       f = i;
 #ifdef debug
@@ -181,7 +181,7 @@ void setDateTime(char *buf, int len)
   s16 P = makeIntArr(buf, len, timeTemp);
   if (P < 6 ) return;
   tm_t tm;
-  if(timeTemp[0] >= 2000) timeTemp[0] = timeTemp[0] - 2000;
+  if (timeTemp[0] >= 2000) timeTemp[0] = timeTemp[0] - 2000;
   tm.year    =   (u8)timeTemp[0];
   tm.month   =   (u8)timeTemp[1];
   tm.day     =   (u8)timeTemp[2];
@@ -275,7 +275,7 @@ bool ArrayIsChar(u8* arr, u16 len)
   {
     is_Char &= (isAscii(arr[t]) && isPrintable(arr[t])) ? 1 : 0;
   }
-  return is_Char; 
+  return is_Char;
 }
 
 bool ArrayIsDigit(u8* arr, u16 len)

@@ -1,19 +1,21 @@
 #pragma once
 
-#define  NEW_FRIJ                   0
-//#define debug
+#define  NEW_FRIJ                   1
+#define debug
 
+#ifdef debug
 #if NEW_FRIJ
 #define FRIJ                        Serial
 #else
 #define FRIJ                        Serial2
 #endif
+#endif
 
-#define LOGLEVEL                    0
+#define LOGLEVEL                    1
 
 
 #define tmr_not_expired(x, y)       x < y ? 1 : 0
-#define MAX_Para                    11
+#define MAX_Para                    12
 #define MAX_LEN                     256
 #define endMsg                      '\r'
 #define progVersion                 "FRIJ_Ver 3.1"
@@ -28,7 +30,7 @@ typedef int16_t                     s16;
 typedef int32_t                     s32;
 
 //FRIJ Parameter Definition
-const char                          *op_command[]                 =         {"001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "081", "082", "083", "144"};
+const char                          *op_command[]                 =         {"000", "001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "081", "082", "083", "144"};
 
 const u8                            RE_No                         =         MAX_Para;
 const u8                            PD_No                         =         MAX_Para + 1;
@@ -71,8 +73,8 @@ char                                ICCID[32]                     =         "";
 char                                CSQ[8]                        =         "";
 char                                IP[32]                        =         "";
 char                                GRD[32]                       =         "GRD000000";
-char                                server[]                      =         "143.110.236.10"; //"104.131.53.102"
-char                                host[]                        =         "8001"; //"2000"
+char                                server[]                      =         "104.131.53.102"; //"143.110.236.10"
+char                                host[]                        =         "2000"; //"8001"
 char                                custom_apn[32]                =         "";
 char                                ttimeBuf[32]                  =         "";
 

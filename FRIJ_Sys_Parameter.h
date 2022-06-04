@@ -1,6 +1,12 @@
 #pragma once
 
-
+s16 DateAndTimeSetting(u8* value, u16 len, s8 _mode)
+{
+  //$$,860665050927986,1,000,22,6,4,8,20,0*
+  //value: char
+  FRIJ.printf("mode: %d, Time str: %s, len: %d\r\n", _mode, value, len);
+  return 0;
+}
 s16 ModeSetting(u8* value, u16 len, s8 _mode)
 {
   //eeprom_addr = 0 - 1 | value: integer
@@ -210,6 +216,7 @@ s16 ParameterOperation(u8 No, u8* value, u16 len, s8 data_mode)
   static fn funcs[] =
   {
     //Parameter                                                             //code             //memory addresses
+    DateAndTimeSetting,                                                     //0
     ModeSetting,                                                            //1                 0 - 1
     ConnectionTypeSetting,                                                  //2                 1 - 2
     PeriodicDump,                                                           //3                 2 - 3

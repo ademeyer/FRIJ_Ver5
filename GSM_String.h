@@ -33,7 +33,7 @@ typedef struct
 {
   const char *query_str;
   const char *resp_str;
-  u16 wait_tmr;
+  u32 wait_tmr;
 } gsm_parameter;
 
 
@@ -73,7 +73,7 @@ void init_GSM_str()
 
   //2 = creating the ntp server string
   ntp_server[0] = {"AT+CLTS?", "+CLTS: 1", 800};                        //0 = check if get network time is set, and if yes, process two stage jump
-  ntp_server[1] = {"AT+CLTS=1", "OK", 500};                             //1 
+  ntp_server[1] = {"AT+CLTS=1", "OK", 500};                             //1
   ntp_server[2] = {"AT&W", "OK", 1000};                                 //2 = process for gsm failed restart
   ntp_server[3] = {"AT+CCLK?", "+CCLK: ", 1000};                        //3 = process time stamp
 
@@ -123,10 +123,10 @@ void routine_id_network_name()
   routine_id = millis() + 25000;
 }
 
-void send_GSM_str(const char *str, u16 str_len, u16 wait, bool endTrans)
+void send_GSM_str(const char *str, u16 str_len, u32 wait, bool endTrans)
 {
 #ifdef debug
-  FRIJ.printf(("Sending %s,len %d and expecting response within %lusecs\r\n"), str, str_len, wait);
+  FRIJ.printf(("%d:%d->len %d and response within %d secs\r\n"), gsm_stage, stage_step, str_len, wait);
 #endif
   if (str_len > 0)        //this is needed to maintain compatibility with when controller is only expecting server/computer
   {
@@ -141,9 +141,10 @@ void send_GSM_str(const char *str, u16 str_len, u16 wait, bool endTrans)
 
 u16 rec_GSM_str()
 {
-  u16 p = 0;
-  if (GSM.available() > 0)
-  {
+  /*
+    u16 p = 0;
+    if (GSM.available() > 0)
+    {
     while (GSM.available() > 0)
     {
       char c = GSM.read();
@@ -152,12 +153,13 @@ u16 rec_GSM_str()
       delayMicroseconds(100);
     }
     return p;
-  }
-  /*
-    if (GSM.available() > 0)
-    {
+    }
+  */
+
+  if (GSM.available() > 0)
+  {
     return (GSM.readBytes(gsm_Raw_Buffer, sizeof(gsm_Raw_Buffer)));
-    }*/
+  }
   return 0;
 }
 
@@ -191,12 +193,12 @@ u16 process_GSM_Frames(const char *str, u16 str_len, char* resp, u16 respLen)
 #endif
     network_failed_restart();
   }
-  else if (strstr(str, "*PSUTTZ") != NULL)
+ /* else if (strstr(str, "*PSUTTZ") != NULL)
   {
     memset(ttimeBuf, 0, sizeof(ttimeBuf));
     tLen = gsm_data_grabber(gsm_Raw_Buffer, grb_len, "*PSUTTZ: ", '+', ttimeBuf, sizeof(ttimeBuf));
     gprs_time_found = true;
-  }
+  }*/
   else if ((strstr(str, server_start_str) != NULL) && (strstr(str, end_str) != NULL) && (strstr(str, IMEI) != NULL))
   {
     beatTimer = millis();

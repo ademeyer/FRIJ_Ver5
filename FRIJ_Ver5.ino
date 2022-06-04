@@ -26,7 +26,7 @@ void setup()
   FRIJ.begin(BAUD_RATE);
   FRIJ.setTimeout(50);
 #if NEW_FRIJ
-  //while (!FRIJ);
+  while (!FRIJ);
 #endif
 #endif
 
@@ -51,5 +51,5 @@ void loop()
   FRIJ_GPIO_Loop();
   FRIJ_Bat_Temp_Loop();
   FRIJ_HVAC_Loop();
-  //handleGetCoordinate();
+  handleGetCoordinate();
 }

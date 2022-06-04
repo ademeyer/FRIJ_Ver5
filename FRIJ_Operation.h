@@ -5,9 +5,9 @@ const u8                            eeprom_stat_no                =         6;//
 
 void form_standard_packet()
 {
-  if (op > -1 && BUFF_Len > 0 && BUFF_Len < (MAX_LEN / 2))
+  if (op > -1 && BUFF_Len > 0 && BUFF_Len < (MAX_LEN / 2) && Res_Len == 0)
   {
-    Res_Len = 0;
+    //Res_Len = 0;
     u16 len = 0;
     memset(RES_BUFF, 0, sizeof(RES_BUFF));
     strcpy(RES_BUFF, start_str);
@@ -20,6 +20,7 @@ void form_standard_packet()
     strcat(RES_BUFF, ",");
     strncat(RES_BUFF, BUFF, BUFF_Len);
     strcat(RES_BUFF, end_str);
+    strcat(RES_BUFF, '\0'); //null terminator
     Res_Len = strlen(RES_BUFF);
 #ifdef debug
     FRIJ.printf(F("Formed: %s:%d\n"), RES_BUFF, Res_Len);
@@ -28,8 +29,11 @@ void form_standard_packet()
     {
       gsm_stage = _NET_STAT;
     }
-    else if (op != HB_No)
+    else if (op == PD_No)
     {
+#ifdef debug
+      FRIJ.printf("\r\nLogging offline data: %s:%d\r\n");
+#endif
       if ((saveIndex + Res_Len) >= (EEPROMMAX - 1) || readIndex > saveIndex)
       {
         clearEventSector(true);
@@ -56,7 +60,6 @@ void form_standard_packet()
         }
       }
     }
-
   }
 
   BUFF_Len = 0;
@@ -65,6 +68,8 @@ void form_standard_packet()
 
 void sendEvents()
 {
+  //not ready to run condidition here
+  if (!tcp_alive || Res_Len != 0 || BUFF_Len != 0) return;
   if (dataAck)
   {
     dataAck = false;
@@ -78,7 +83,7 @@ void sendEvents()
     }
   }
   //sending out control
-  if (readIndex < saveIndex && Res_Len == 0 && tcp_alive)
+  if (readIndex < saveIndex && Res_Len == 0)
   {
     Res_Len =  ReadMessage(readIndex, (u8*)RES_BUFF, sizeof(RES_BUFF)); //ReadMessage(u32 eeprom_addr, u8* byteArr, u16 maxLen)
     readIndex = readIndex +  Res_Len;
@@ -87,7 +92,8 @@ void sendEvents()
     FRIJ.print(F("Res_Len: "));
     FRIJ.print(Res_Len);
     FRIJ.print(F(" readIndex: "));
-    FRIJ.println(readIndex);
+    FRIJ.print(readIndex);
+    FRIJ.printf(" from eeprom->%s:%d\r\n", RES_BUFF, Res_Len);
 #endif
   }
 }
@@ -178,7 +184,7 @@ void operate_on_data()
       //$$,862643039032861,1,001,1*
       //$$,862643039032861,1,007,Hello*
 #ifdef debug
-      FRIJ.printf(F("%s: %d\n"), userInput, inputLen);
+      FRIJ.printf(F("operate->%s: %d\n"), userInput, inputLen);
 #endif
       //grab data mode
       strcat(_next, IMEI);
@@ -198,7 +204,17 @@ void operate_on_data()
 #ifdef debug
         FRIJ.printf(F("invalid sys_addr: %s\n"), foo);
 #endif
+        /*
+                if (strstr(userInput, "ACK") != NULL)
+                {
+          #ifdef debug
+                  FRIJ.printf("server ack data!\r\n");
+          #endif
+                  dataAck = true;
+                }
+        */
         inputLen = 0;
+        memset(userInput, 0, sizeof(userInput));
         return;
       }
       byte _value[32] = {0}, r = 0;
@@ -344,26 +360,28 @@ void EEPROM_Read_Statics()
 
 void FRIJ_Operation_Loop()
 {
+  operate_on_data();
   EEPROM_Read_Statics();
   form_standard_packet();
   heart_beat_packet();
-  operate_on_data();
   periodic_dump_packet();
-  //sendEvents();
+  sendEvents();
+  
+#ifdef debug
 #if LOGLEVEL
   if (FRIJ.available() > 0 && inputLen == 0)
   {
     if ((inputLen = FRIJ.readBytesUntil('\r', userInput, sizeof(userInput))) > 0)
     {
-#ifdef debug
       FRIJ.printf(F("debug input: "));
       FRIJ.write((u8*)userInput, inputLen);
       FRIJ.println();
-#endif
+
       operate = true;
       useUSB = true;
     }
   }
+#endif
 #endif
 
 }

@@ -1,8 +1,8 @@
 #pragma once
 
 #define USEINTERRUPT                1
-#define SECONDFUNCTIONTIME          1200
-#define FIRSTFUNCTIONTIME           70
+#define SECONDFUNCTIONTIME          1300
+#define FIRSTFUNCTIONTIME           85
 
 #define MAX_GPIO                    4
 #define PWR_PIN                     PB2

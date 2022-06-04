@@ -7,7 +7,7 @@
 #define GSM_DELAY       5000
 #endif
 
-void send_GSM_str(const char *str, u16 str_len, u16 wait, bool endTrans = false);
+void send_GSM_str(const char *str, u16 str_len, u32 wait, bool endTrans = false);
 
 void GSM_Response_Handler()
 {
@@ -214,6 +214,7 @@ void GSM_Response_Handler()
         {
           tcp_alive_timer = millis() + MAX_ALIVE_TIME;
           dataAck = true;
+          Res_Len = 0;
         }
       }
       else
@@ -226,6 +227,10 @@ void GSM_Response_Handler()
           stage_step = 0;
           gsm_stage = 0;
           gprs_Is_available = false;
+        }
+        else if(stage_step == 2)
+        {
+          Res_Len = 0; 
         }
       }
       break;
@@ -353,7 +358,7 @@ void GSM_Send_Handler()
           send_GSM_str(temp_str, strlen(temp_str), send_data[stage_step].wait_tmr, true);
           stage_step++;
 #ifdef debug
-          FRIJ.printf(F("datalen: %d\r\n"), Res_Len);
+          FRIJ.printf(F("\r\ndatalen: %d\r\n"), Res_Len);
           FRIJ.write((u8*)temp_str, strlen(temp_str));
           FRIJ.println();
 #endif
@@ -417,7 +422,7 @@ void setUp_GSM()
   digitalWrite(GSM_PWR, HIGH);
 #endif
   GSM.begin(BAUD_RATE);
-  //GSM.setTimeout(100);
+  GSM.setTimeout(50);
   init_GSM_str();
   gsm_operation_delay = millis() + GSM_DELAY;
   tcp_alive_timer = millis() + MAX_ALIVE_TIME + 120000;
