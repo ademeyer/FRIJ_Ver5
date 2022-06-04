@@ -37,7 +37,11 @@ int ExtractData(char *val, char *GPS_data, int maxsize)
   bigchar = (char*)malloc(2048);
   if (!bigchar)
   {
+#ifdef debug
     FRIJ.printf("malloc failed\r\n");
+#endif
+
+    return;
   }
 
   int redl = GPS.readBytes(bigchar, 2048);
@@ -90,18 +94,22 @@ void handleGetCoordinate(void)
       char splitted[8][32] = {""};
 
       u16 pos = splitDelIntoArr(GPSBuffer, amt, splitted, 8);
+#ifdef debug
       for (int p = 0; p < pos; p++)
         FRIJ.printf("%d:%s\r\n", p, splitted[p]);
-      if (splitted[5][0] == 'A') 
+#endif
+      if (splitted[5][0] == 'A')
       {
         valid_GPS = true;
       }
-      else 
+      else
         valid_GPS = false;
 
       if (valid_GPS)
       {
+#ifdef debug
         FRIJ.println("valid GPS data!");
+#endif
         memset(G_Long, 0, sizeof(G_Long));
         memset(G_Lat, 0, sizeof(G_Lat));
         strncat(G_Lat, splitted[2], sizeof(G_Lat));

@@ -307,7 +307,9 @@ void operate_on_data()
           BUFF[BUFF_Len++] = 'L';
         }
       }
+#ifdef debug
       FRIJ.printf(F("BUFF: %s:%d\n"), BUFF, BUFF_Len);
+#endif
     }
   }
   inputLen = 0;
@@ -366,7 +368,7 @@ void FRIJ_Operation_Loop()
   heart_beat_packet();
   periodic_dump_packet();
   sendEvents();
-  
+
 #ifdef debug
 #if LOGLEVEL
   if (FRIJ.available() > 0 && inputLen == 0)

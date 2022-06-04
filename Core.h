@@ -1,7 +1,7 @@
 #pragma once
 
 #define  NEW_FRIJ                   1
-#define debug
+//#define debug
 
 #ifdef debug
 #if NEW_FRIJ
@@ -11,7 +11,7 @@
 #endif
 #endif
 
-#define LOGLEVEL                    1
+#define LOGLEVEL                    0
 
 
 #define tmr_not_expired(x, y)       x < y ? 1 : 0
