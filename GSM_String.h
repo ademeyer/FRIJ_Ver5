@@ -48,7 +48,7 @@ gsm_parameter close_net     [CLOSE_NET_NO];
 
 
 //mcc, mnc, lac and cellid
-void init_GSM_str()
+void init_GSM_str(void)
 {
   //0 = creating the detect gsm string
   detect_gsm[0] = {"AT", "OK", 200};                                    //0
@@ -112,7 +112,7 @@ s8 id_network_name(const char* mccmnc)
   return net_id;
 }
 
-void routine_id_network_name()
+void routine_id_network_name(void)
 {
   if (strlen(MNC) <= 0 || strlen(MCC) <= 0 || millis() <= routine_id) return;
 
@@ -139,7 +139,7 @@ void send_GSM_str(const char *str, u16 str_len, u32 wait, bool endTrans)
   gsm_response_tmr = millis() + wait;
 }
 
-u16 rec_GSM_str()
+u16 rec_GSM_str(void)
 {
   /*
     u16 p = 0;
@@ -174,7 +174,7 @@ bool GSM_str_is_valid(const char *comp_str)
   return false;
 }
 
-void network_failed_restart()
+void network_failed_restart(void)
 {
   gsm_stage = 0;
   stage_step = 0;
@@ -212,7 +212,7 @@ u16 process_GSM_Frames(const char *str, u16 str_len, char* resp, u16 respLen)
   return rLen;
 }
 
-void connectivity_watchdog()
+void connectivity_watchdog(void)
 {
   if (millis() > tcp_alive_timer)
   {

@@ -16,7 +16,7 @@ s16                                 disp_timer[]                  =         {500
 u32                                 disp_switch_tmr               =         0;
 bool                                not_drawn                     =         true;
 
-void logo_display()
+void logo_display(void)
 {
   //display.clearDisplay();
   display.drawBitmap(0, 0, gricdlogo, 128, 64, 1);
@@ -24,7 +24,7 @@ void logo_display()
 
 }
 
-void charging_display()
+void charging_display(void)
 {
   if (charg_stat == 1)
   {
@@ -33,7 +33,7 @@ void charging_display()
   }
 }
 
-void home_display()
+void home_display(void)
 {
 
   s16 disp_offset = 0, shift = 0;
@@ -108,7 +108,7 @@ void home_display()
   display.display();
 }
 
-void message_display()
+void message_display(void)
 {
   display.setTextColor(SSD1306_WHITE);
   display.setTextSize(2);
@@ -118,7 +118,7 @@ void message_display()
 
 }
 
-void init_display()
+void init_display(void)
 {
   while (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
   {
@@ -133,13 +133,13 @@ void init_display()
   display_stage = 0;
 }
 
-void disp_timer_watch()
+void disp_timer_watch(void)
 {
   if (millis() > disp_switch_tmr && disp_switch_tmr > 0 && !force_shut_down)
     display_stage++;
 }
 
-void control_display_flow()
+void control_display_flow(void)
 {
   if (force_shut_down)
   {
@@ -175,7 +175,7 @@ void control_display_flow()
   }
 }
 
-void clearOLED()
+void clearOLED(void)
 {
   if (clear_disp)
   {
@@ -187,7 +187,7 @@ void clearOLED()
   }
 }
 
-void display_process()
+void display_process(void)
 {
   clearOLED();
   /*

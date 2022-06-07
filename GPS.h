@@ -41,7 +41,7 @@ int ExtractData(char *val, char *GPS_data, int maxsize)
     FRIJ.printf("malloc failed\r\n");
 #endif
 
-    return;
+    return 0;
   }
 
   int redl = GPS.readBytes(bigchar, 2048);
@@ -89,7 +89,8 @@ void handleGetCoordinate(void)
       //$GPGLL,,,,,094659.00,V,N*4D
 
 #ifdef debug
-      FRIJ.printf("Done: %s:%d\r\n", GPSBuffer, amt);
+      FRIJ.printf("Done\r\n");
+      //FRIJ.printf("Done: %s:%d\r\n", GPSBuffer, amt);
 #endif
       char splitted[8][32] = {""};
 

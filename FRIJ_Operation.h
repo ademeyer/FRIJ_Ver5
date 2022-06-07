@@ -3,7 +3,7 @@
 const u8                            eeprom_stat[]                 =         {1, 3, 4, 5, 6, 7};
 const u8                            eeprom_stat_no                =         6;//strlen((char*)eeprom_stat);
 
-void form_standard_packet()
+void form_standard_packet(void)
 {
   if (op > -1 && BUFF_Len > 0 && BUFF_Len < (MAX_LEN / 2) && Res_Len == 0)
   {
@@ -60,13 +60,12 @@ void form_standard_packet()
         }
       }
     }
+    BUFF_Len = 0;
+    op = -1;
   }
-
-  BUFF_Len = 0;
-  op = -1;
 }
 
-void sendEvents()
+void sendEvents(void)
 {
   //not ready to run condidition here
   if (!tcp_alive || Res_Len != 0 || BUFF_Len != 0) return;
@@ -98,7 +97,7 @@ void sendEvents()
   }
 }
 
-void periodic_dump_packet()
+void periodic_dump_packet(void)
 {
   if (BUFF_Len != 0 || op != -1) return;
   if (millis() >= (pdTimer + (pdTime * 60 * 1000)) && pdTime > 0)
@@ -137,6 +136,7 @@ void periodic_dump_packet()
 
     if (BUFF_Len > 0)
     {
+      BUFF[BUFF_Len] = '\0';
       op = PD_No;
       if (valid_GPS) op = op + 1;
     }
@@ -145,7 +145,7 @@ void periodic_dump_packet()
   }
 }
 
-void heart_beat_packet()
+void heart_beat_packet(void)
 {
   if (BUFF_Len != 0 || op != -1)
   {
@@ -160,6 +160,7 @@ void heart_beat_packet()
     {
       for (int i = 0; i < len; i++)
         BUFF[BUFF_Len++] = (char)value[i];
+      BUFF[BUFF_Len] = '\0';
 #ifdef debug
       FRIJ.printf(F("HB --> %s:%d:%d\n"), BUFF, len, BUFF_Len);
 #endif
@@ -169,7 +170,7 @@ void heart_beat_packet()
   }
 }
 
-void operate_on_data()
+void operate_on_data(void)
 {
   if (BUFF_Len != 0 || op != -1) return;
   if (operate)
@@ -315,7 +316,7 @@ void operate_on_data()
   inputLen = 0;
 }
 
-void EEPROM_Read_Statics()
+void EEPROM_Read_Statics(void)
 {
   if (!EEPROM_Read)//{1, 3, 4, 5, 6, 7};
   {
@@ -360,7 +361,7 @@ void EEPROM_Read_Statics()
 }
 
 
-void FRIJ_Operation_Loop()
+void FRIJ_Operation_Loop(void)
 {
   operate_on_data();
   EEPROM_Read_Statics();

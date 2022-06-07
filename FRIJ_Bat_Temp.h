@@ -50,7 +50,7 @@ u16 sampleADC(const u8 pin, u8 samples)
 }
 #endif
 
-void FRIJ_Bat_Temp_Setup()
+void FRIJ_Bat_Temp_Setup(void)
 {
 
   for (int i = 0; i < MAX_ADC; i++)
@@ -66,7 +66,7 @@ void FRIJ_Bat_Temp_Setup()
 #endif
 }
 
-void FRIJ_Bat_Temp_Loop()
+void FRIJ_Bat_Temp_Loop(void)
 {
 #if !USEADCINTERRUPT
   for (int i = 0; i < MAX_ADC; i++)

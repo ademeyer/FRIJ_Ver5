@@ -9,7 +9,7 @@
 
 void send_GSM_str(const char *str, u16 str_len, u32 wait, bool endTrans = false);
 
-void GSM_Response_Handler()
+void GSM_Response_Handler(void)
 {
   bool resp = false;
   switch (gsm_stage)
@@ -151,6 +151,7 @@ void GSM_Response_Handler()
           {
             tcp_alive = true;
             tcp_alive_timer = millis() + MAX_ALIVE_TIME;
+            Res_Len = 0;
 #if LOGLEVEL
             FRIJ.printf(F("OK, tcp connection exists\n"));
 #endif
@@ -385,7 +386,7 @@ void GSM_Send_Handler()
 }
 
 
-void GSM_Process()
+void GSM_Process(void)
 {
   if (tmr_not_expired(millis(), gsm_operation_delay) || !powered)
   {
@@ -415,7 +416,7 @@ void GSM_Process()
   //routine_id_network_name();
 }
 
-void setUp_GSM()
+void setUp_GSM(void)
 {
 #if NEW_FRIJ
   pinMode(GSM_PWR, OUTPUT);

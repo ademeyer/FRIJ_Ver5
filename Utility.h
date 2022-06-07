@@ -7,7 +7,7 @@ RTClock                             rtclock (RTCSEL_HSE);
 bool                                BitRead(u32 val, u8 pos);
 time_t                              tt                            =         0;
 
-void SecondCount ()
+void SecondCount (void)
 {
   tt++;
 }
@@ -169,7 +169,7 @@ bool make8(u32 _data, u8 byte_no, u8* _sm)
   return true;
 }
 
-void RTC_Setup()
+void RTC_Setup(void)
 {
   rtclock.attachSecondsInterrupt(SecondCount);
 }
@@ -319,10 +319,9 @@ int convertTemp(u16 adcAverage)
   return (int)tCelsius;    // Return the temperature in Celsius
 }
 
-void synchronize_time()
+void synchronize_time(void)
 {
   //format: yr/mn/dd, hr:mm:ss+tz
-
   if (gprs_time_found && !frij_time_synchronized)
   {
     setDateTime(ttimeBuf, tLen);

@@ -14,11 +14,11 @@ const u32                           indexes_Address[]                 =         
 const u32                           Event[]                           =         {(indexes_Address[1] + 1), (EEPROMMAX - 1)};                      //Variable byte space
 
 
-void getEventFreeMemoryIndex();
+void getEventFreeMemoryIndex(void);
 void clearEventSector(bool form);
 
 
-void EEPROMSetup()
+void EEPROMSetup(void)
 {
   Wire.begin();
   Wire.setClock(400000);
@@ -260,7 +260,7 @@ bool saveEventIndexes(u32 _l)
     returns:      null
 */
 
-void getEventFreeMemoryIndex()
+void getEventFreeMemoryIndex(void)
 {
 #ifdef debug
   if (FRIJ)

@@ -27,7 +27,7 @@ void InterruptFunctionCall(void)
 #endif
 
 
-void FRIJ_GPIO_setup()
+void FRIJ_GPIO_setup(void)
 {
   for (int i = 0; i < MAX_GPIO; i++)
   {
@@ -38,7 +38,7 @@ void FRIJ_GPIO_setup()
   }
 }
 
-void FRIJ_GPIO_Loop()
+void FRIJ_GPIO_Loop(void)
 {
   for (int i = 0; i < MAX_GPIO; i++)
   {

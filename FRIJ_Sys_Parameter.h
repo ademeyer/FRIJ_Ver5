@@ -4,8 +4,22 @@ s16 DateAndTimeSetting(u8* value, u16 len, s8 _mode)
 {
   //$$,860665050927986,1,000,22,6,4,8,20,0*
   //value: char
+#ifdef debug
   FRIJ.printf("mode: %d, Time str: %s, len: %d\r\n", _mode, value, len);
-  return 0;
+#endif
+  if(_mode == 1)
+  {
+    strncpy(ttimeBuf, (char*)value, len);
+    gprs_time_found = true;
+    frij_time_synchronized = false;
+    tLen = len;
+    return 0;
+  }
+  else
+  {
+    return getTime_string((char*)value);
+  }
+  
 }
 s16 ModeSetting(u8* value, u16 len, s8 _mode)
 {
