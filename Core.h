@@ -1,6 +1,6 @@
 #pragma once
 
-#define  NEW_FRIJ                   1
+#define  NEW_FRIJ                   0
 
 //#define debug
 
