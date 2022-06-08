@@ -113,8 +113,8 @@ void handleGetCoordinate(void)
 #endif
         memset(G_Long, 0, sizeof(G_Long));
         memset(G_Lat, 0, sizeof(G_Lat));
-        strncat(G_Lat, splitted[2], sizeof(G_Lat));
-        strncat(G_Long, splitted[0], sizeof(G_Long));
+        strncat(G_Lat, splitted[0], sizeof(G_Lat));
+        strncat(G_Long, splitted[2], sizeof(G_Long));
       }
     }
 #ifdef debug

@@ -138,7 +138,7 @@ void periodic_dump_packet(void)
     {
       BUFF[BUFF_Len] = '\0';
       op = PD_No;
-      if (valid_GPS) op = op + 1;
+      //if (valid_GPS) op = op + 1;
     }
     pdTimer = millis();
     beatTimer = millis();

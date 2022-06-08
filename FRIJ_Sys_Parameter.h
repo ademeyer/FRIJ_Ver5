@@ -7,7 +7,7 @@ s16 DateAndTimeSetting(u8* value, u16 len, s8 _mode)
 #ifdef debug
   FRIJ.printf("mode: %d, Time str: %s, len: %d\r\n", _mode, value, len);
 #endif
-  if(_mode == 1)
+  if (_mode == 1)
   {
     strncpy(ttimeBuf, (char*)value, len);
     gprs_time_found = true;
@@ -19,7 +19,7 @@ s16 DateAndTimeSetting(u8* value, u16 len, s8 _mode)
   {
     return getTime_string((char*)value);
   }
-  
+
 }
 s16 ModeSetting(u8* value, u16 len, s8 _mode)
 {
@@ -112,8 +112,18 @@ s16 NetworkInformation(u8* value, u16 len, s8 _mode)
   value[vlen++] = ',';
 
 
+  for (int k = 0; k < strlen(LAC); k++)
+    value[vlen++] = (u8)LAC[k];
+
+  value[vlen++] = ',';
+
+  for (int k = 0; k < strlen(CID); k++)
+    value[vlen++] = (u8)CID[k];
+
   if (valid_GPS)
-  {
+  { 
+    value[vlen++] = ',';
+
     for (int k = 0; k < strlen(G_Lat); k++)
       value[vlen++] = (u8)G_Lat[k];
 
@@ -123,8 +133,8 @@ s16 NetworkInformation(u8* value, u16 len, s8 _mode)
       value[vlen++] = (u8)G_Long[k];
 
   }
-  else
-  {
+  /*else
+    {
     for (int k = 0; k < strlen(LAC); k++)
       value[vlen++] = (u8)LAC[k];
 
@@ -132,8 +142,8 @@ s16 NetworkInformation(u8* value, u16 len, s8 _mode)
 
     for (int k = 0; k < strlen(CID); k++)
       value[vlen++] = (u8)CID[k];
-  }
-
+    }
+  */
 
   value[vlen++] = ',';
 
