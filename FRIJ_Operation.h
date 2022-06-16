@@ -340,7 +340,7 @@ void EEPROM_Read_Statics(void)
         }
         else if (i == 2)
         {
-          if (value[0] == 0)
+          if (value[0] == 1)
             lock = true;
           else
             lock = false;
