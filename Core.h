@@ -22,6 +22,7 @@
 #define endMsg                      '\r'
 #define progVersion                 "FRIJ_Ver 3.1"
 #define MAX_BEAT_TIME               60000 // 1min
+#define DEFAULTPD                   2
 
 //datatypes
 typedef uint8_t                     u8;

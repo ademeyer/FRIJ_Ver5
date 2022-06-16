@@ -320,7 +320,7 @@ void EEPROM_Read_Statics(void)
 {
   if (!EEPROM_Read)//{1, 3, 4, 5, 6, 7};
   {
-    u8 value[32];
+    u8 value[128] = {0};
     s16 len = 0;
     for (int i = 0; i < eeprom_stat_no; i++)
     {
@@ -331,8 +331,20 @@ void EEPROM_Read_Statics(void)
         FRIJ.printf(F("no #%d--> paraID #%d:%d\n"), i, eeprom_stat[i], value[0]);
 #endif
         if      (i == 0) mode = value[0];
-        //else if (i == 1) pdTime = value[0];
-        else if (i == 2) lock = value[0];
+        else if (i == 1)
+        {
+          if (value[0] <= 10 && value[0] > 0)
+            pdTime = value[0];
+          else
+            pdTime = DEFAULTPD;
+        }
+        else if (i == 2)
+        {
+          if (value[0] == 0)
+            lock = true;
+          else
+            lock = false;
+        }
         else if (i == 3) set_box_temp = (s8)value[0];
         else if (i == 4)
         {
