@@ -21,7 +21,11 @@ void clearEventSector(bool form);
 void EEPROMSetup(void)
 {
   Wire.begin();
+#if NEW_FRIJ
   Wire.setClock(400000);
+#else
+  Wire.setClock(100000); //100kHz
+#endif
   delay(100);
   getEventFreeMemoryIndex();
 #ifdef debug

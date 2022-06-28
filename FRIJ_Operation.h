@@ -2,6 +2,7 @@
 
 const u8                            eeprom_stat[]                 =         {1, 3, 4, 5, 6, 7};
 const u8                            eeprom_stat_no                =         6;//strlen((char*)eeprom_stat);
+bool                                eeprom_readout                =         false;
 
 void form_standard_packet(void)
 {
@@ -32,7 +33,7 @@ void form_standard_packet(void)
     else if (op == PD_No)
     {
 #ifdef debug
-      FRIJ.printf("\r\nLogging offline data: %s:%d\r\n");
+      FRIJ.printf("\r\nLogging offline data\r\n");
 #endif
       if ((saveIndex + Res_Len) >= (EEPROMMAX - 1) || readIndex > saveIndex)
       {
@@ -76,9 +77,10 @@ void sendEvents(void)
     memset(RES_BUFF, 0, sizeof(RES_BUFF));
     Res_Len = 0;
 
-    if (readIndex >= saveIndex && saveIndex > Event[0])
+    if (readIndex >= saveIndex && saveIndex > Event[0] && eeprom_readout)
     {
-      clearEventSector(false);
+      clearEventSector(true);
+      eeprom_readout = false;
     }
   }
   //sending out control
@@ -94,6 +96,7 @@ void sendEvents(void)
     FRIJ.print(readIndex);
     FRIJ.printf(" from eeprom->%s:%d\r\n", RES_BUFF, Res_Len);
 #endif
+    eeprom_readout = true;
   }
 }
 
@@ -180,6 +183,7 @@ void operate_on_data(void)
     {
       char foo[MAX_LEN] = "", _next[MAX_LEN] = "";
       u8 len = 0;
+      //$$,864713030737814,0,000*
       /* start_of_msg, imei, datamode, system_address, other data, end_of_msg*/
       //$$,862643039032861,0,002,1*
       //$$,862643039032861,1,001,1*
@@ -325,7 +329,7 @@ void EEPROM_Read_Statics(void)
     for (int i = 0; i < eeprom_stat_no; i++)
     {
       len = 0;
-      if ((len = ParameterOperation((eeprom_stat[i] - 1), value, sizeof(value), 0)) > 0)
+      if ((len = ParameterOperation((eeprom_stat[i]), value, sizeof(value), 0)) > 0)
       {
 #ifdef debug
         FRIJ.printf(F("no #%d--> paraID #%d:%d\n"), i, eeprom_stat[i], value[0]);

@@ -126,7 +126,7 @@ void routine_id_network_name(void)
 void send_GSM_str(const char *str, u16 str_len, u32 wait, bool endTrans)
 {
 #ifdef debug
-  FRIJ.printf(("%d:%d->len %d and response within %d secs\r\n"), gsm_stage, stage_step, str_len, wait);
+  FRIJ.printf(("%d:%d->len %d and response within %lu secs\r\n"), gsm_stage, stage_step, str_len, wait);
 #endif
   if (str_len > 0)        //this is needed to maintain compatibility with when controller is only expecting server/computer
   {
@@ -141,21 +141,6 @@ void send_GSM_str(const char *str, u16 str_len, u32 wait, bool endTrans)
 
 u16 rec_GSM_str(void)
 {
-  /*
-    u16 p = 0;
-    if (GSM.available() > 0)
-    {
-    while (GSM.available() > 0)
-    {
-      char c = GSM.read();
-      if (p < sizeof(gsm_Raw_Buffer))
-        gsm_Raw_Buffer[p++] = c;
-      delayMicroseconds(100);
-    }
-    return p;
-    }
-  */
-
   if (GSM.available() > 0)
   {
     return (GSM.readBytes(gsm_Raw_Buffer, sizeof(gsm_Raw_Buffer)));

@@ -390,9 +390,9 @@ void GSM_Process(void)
 {
   if (tmr_not_expired(millis(), gsm_operation_delay) || !powered)
   {
-#ifdef debug
-    FRIJ.printf(F("."));
-#endif
+//#ifdef debug
+    //FRIJ.printf(F("."));
+//#endif
     return;
   }
 

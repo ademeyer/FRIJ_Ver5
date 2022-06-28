@@ -2,7 +2,12 @@
 
 #define USEINTERRUPT                1
 #define SECONDFUNCTIONTIME          1300
+
+#if NEW_FRIJ
 #define FIRSTFUNCTIONTIME           85
+#else
+#define FIRSTFUNCTIONTIME           120
+#endif
 
 #define MAX_GPIO                    4
 #define PWR_PIN                     PB2
@@ -102,7 +107,7 @@ void FRIJ_GPIO_Loop(void)
           }
           else if (i == 1) //save set temp
           {
-            u8 value[1];
+            u8 value[1]={0};
             value[0] = (u8)set_box_temp;
             BoxTemperatureSetting( value, 1, 1);
           }
